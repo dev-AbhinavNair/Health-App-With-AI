@@ -87,12 +87,7 @@ export default function UserChatPage() {
       });
       if (res.ok) {
         const data = await res.json();
-        console.log(
-          "=== FRONTEND AI RESPONSE ===",
-          res.status,
-          data.type,
-          data.message?.slice(0, 60),
-        );
+
         const aiMsg = {
           _id: "ai-" + Date.now(),
           content: data.message,

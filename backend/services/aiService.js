@@ -96,11 +96,11 @@ const generateSummary = async (conversation) => {
 
   if (result.error) {
     console.error("All AI providers failed");
-    return getMockResponse();
+    return fallbackResponse();
   }
 
   const content = result.choices?.[0]?.message?.content;
-  if (!content) return getMockResponse();
+  if (!content) return fallbackResponse();
   return parseResponse(content);
 };
 
@@ -180,17 +180,15 @@ const parseResponse = (raw) => {
   return { summary, recommendations, symptoms: [], severity };
 };
 
-const getMockResponse = () => {
+const fallbackResponse = () => {
   return {
-    summary: "This is a mock summary",
+    summary: "Unable to generate summary at this time.",
     recommendations:
-      "1. mock recommendation.\n2. mock recommendation.\n3. mock recommendation.\n4. mock recommendation. \n\nNote: This AI-generated summary is for informational purposes only and does not provide any medical advice.",
-    symptoms: [
-      { name: "Sample symptom", duration: "N/A", severity: "mild" },
-    ],
+      "Please consult with a healthcare provider for personalized medical advice.",
+    symptoms: [],
     severity: "low",
   };
-  };
+};
 
 const conversationPrompt = `You are a clinical intake assistant. Your role is to gather information about the patient's condition step by step.
 
@@ -252,7 +250,7 @@ const generateConversationResponse = async (conversation, patientContext = null)
 
   if (!result.error) {
     const content = result.choices?.[0]?.message?.content;
-    console.log("=== RAW AI RESPONSE ===", content);
+
     if (content) return parseConversationResponse(content);
   }
 
