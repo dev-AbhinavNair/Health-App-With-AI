@@ -203,11 +203,7 @@ export default function PatientHistory() {
             <p className="text-sm text-slate-500">No matching records</p>
           </div>
         ) : (
-          <div className="relative">
-            {/* Vertical timeline line */}
-            <div className="absolute left-[19px] top-0 bottom-0 w-0.5 bg-slate-200 rounded-full" />
-
-            <div className="space-y-4">
+          <div className="space-y-4">
               {entries.map((entry, idx) => {
                 const isLast = idx === entries.length - 1;
                 const icon = categoryIconMap[entry.type] || categoryIconMap.symptom_log;
@@ -216,6 +212,10 @@ export default function PatientHistory() {
 
                 return (
                   <div key={entry.id || idx} className="relative flex gap-4">
+                    {/* Connector line (hidden on last entry) */}
+                    {!isLast && (
+                      <div className="absolute left-[19px] top-[42px] bottom-[-16px] w-0.5 bg-slate-200 rounded-full" />
+                    )}
                     {/* Timeline dot + icon */}
                     <div className="relative z-10 flex flex-col items-center">
                       <div className={`w-[38px] h-[38px] rounded-xl flex items-center justify-center shrink-0 ${iconBg}`}>
@@ -265,7 +265,6 @@ export default function PatientHistory() {
                 );
               })}
             </div>
-          </div>
         )}
 
         {/* Summary count */}
