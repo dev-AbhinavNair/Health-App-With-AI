@@ -6,6 +6,7 @@ const navItems = [
   { label: 'Meds', icon: 'meds', path: '/medications' },
   { label: 'Chat', icon: 'chat', path: '/user-chat' },
   { label: 'History', icon: 'history', path: '/history' },
+  { label: 'Profile', icon: 'profile', path: '/my-profile' },
 ];
 
 const iconMap = {
@@ -100,8 +101,12 @@ export default function UserLayout() {
         <div className="m-4 p-4 bg-slate-800/40 border border-slate-700/50 rounded-2xl">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3 min-w-0">
-              <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white text-sm font-semibold shrink-0">
-                {initials || 'U'}
+              <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white text-sm font-semibold shrink-0 overflow-hidden">
+                {user?.profilePicture ? (
+                  <img src={user.profilePicture} alt="" className="w-full h-full object-cover" />
+                ) : (
+                  initials || 'U'
+                )}
               </div>
               <div className="overflow-hidden">
                 <p className="text-sm font-semibold text-white truncate">{user?.name || 'User'}</p>

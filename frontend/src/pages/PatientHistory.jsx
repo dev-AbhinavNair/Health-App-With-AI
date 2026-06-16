@@ -100,8 +100,8 @@ export default function PatientHistory() {
   const isSummaryEmpty = activeTab === 'doctor_summary' && entries.length === 0;
 
   return (
-    <div className="flex-1 bg-slate-50">
-      <div className="max-w-md lg:max-w-4xl mx-auto px-4 lg:px-8 pt-6 pb-28 lg:pb-8">
+    <div className="flex-1 w-full bg-slate-50 overflow-x-hidden">
+      <div className="w-full lg:max-w-4xl mx-auto px-4 lg:px-8 pt-6 pb-28 lg:pb-8">
         {/* Header */}
         <div className="flex items-center justify-between mb-5">
           <div className="flex items-center gap-3">
@@ -142,7 +142,7 @@ export default function PatientHistory() {
         </form>
 
         {/* Category Tabs */}
-        <div className="flex gap-2 mb-5 overflow-x-auto pb-1 scrollbar-none">
+        <div className="flex gap-2 mb-5 overflow-x-auto max-w-full pb-1 scrollbar-none">
           {tabs.map((tab) => {
             const isActive = tab.value === activeTab;
             return (
@@ -203,7 +203,7 @@ export default function PatientHistory() {
             <p className="text-sm text-slate-500">No matching records</p>
           </div>
         ) : (
-          <div className="space-y-4">
+          <div className="space-y-4 max-w-full">
               {entries.map((entry, idx) => {
                 const isLast = idx === entries.length - 1;
                 const icon = categoryIconMap[entry.type] || categoryIconMap.symptom_log;
@@ -231,7 +231,7 @@ export default function PatientHistory() {
                       <div className="flex items-start justify-between gap-2">
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2 flex-wrap mb-0.5">
-                            <h3 className="text-sm font-semibold text-slate-900 leading-tight">
+                            <h3 className="text-sm font-semibold text-slate-900 leading-tight break-words">
                               {entry.title}
                             </h3>
                             {entry.statusBadge && (
@@ -245,13 +245,13 @@ export default function PatientHistory() {
                               </span>
                             )}
                           </div>
-                          <p className="text-xs text-slate-400 mb-1.5">
+                          <p className="text-xs text-slate-400 mb-1.5 break-words">
                             {formatTimestamp(entry.timestamp)}
                             {entry.medicationName && ` · ${entry.medicationName} ${entry.dosage || ''}`}
                           </p>
-                          <p className="text-sm text-slate-600 leading-relaxed line-clamp-2">
-                            {entry.preview || entry.messageContent || (entry.symptoms?.length ? entry.symptoms.map(s => s.name).join(', ') : '')}
-                          </p>
+          <p className="text-sm text-slate-600 leading-relaxed line-clamp-2 break-words">
+            {entry.preview || entry.messageContent || (entry.symptoms?.length ? entry.symptoms.map(s => s.name).join(', ') : '')}
+          </p>
                           {entry.eventType === 'missed_dose' && (
                             <p className="text-xs text-orange-600 mt-1">Scheduled dose not taken</p>
                           )}
@@ -282,7 +282,7 @@ export default function PatientHistory() {
           onClick={() => setDetailEntry(null)}
         >
           <div
-            className="bg-white rounded-2xl shadow-xl max-w-lg w-full max-h-[80vh] overflow-y-auto p-6"
+            className="bg-white rounded-2xl shadow-xl max-w-lg w-full max-h-[80vh] overflow-y-auto p-6 break-words"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between mb-4">
@@ -309,19 +309,19 @@ export default function PatientHistory() {
                 {detailEntry.summary && (
                   <div>
                     <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1">Summary</p>
-                    <p className="text-sm text-slate-800 leading-relaxed">{detailEntry.summary}</p>
+                    <p className="text-sm text-slate-800 leading-relaxed break-words">{detailEntry.summary}</p>
                   </div>
                 )}
                 {detailEntry.recommendations && (
                   <div>
                     <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1">Recommendations</p>
-                    <p className="text-sm text-slate-700 leading-relaxed whitespace-pre-line">{detailEntry.recommendations}</p>
+                    <p className="text-sm text-slate-700 leading-relaxed whitespace-pre-line break-words">{detailEntry.recommendations}</p>
                   </div>
                 )}
                 {detailEntry.doctorNotes && (
                   <div>
                     <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1">Doctor Notes</p>
-                    <p className="text-sm text-slate-700 leading-relaxed">{detailEntry.doctorNotes}</p>
+                    <p className="text-sm text-slate-700 leading-relaxed break-words">{detailEntry.doctorNotes}</p>
                   </div>
                 )}
                 {detailEntry.symptoms && detailEntry.symptoms.length > 0 && (
@@ -350,7 +350,7 @@ export default function PatientHistory() {
             {detailEntry.type === 'symptom_log' && (
               <div>
                 <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1">Patient Report</p>
-                <p className="text-sm text-slate-800 leading-relaxed">{detailEntry.messageContent || detailEntry.preview}</p>
+                <p className="text-sm text-slate-800 leading-relaxed break-words">{detailEntry.messageContent || detailEntry.preview}</p>
                 {detailEntry.severity && (
                   <div className="mt-3">
                     <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1">Severity</p>
@@ -365,7 +365,7 @@ export default function PatientHistory() {
             {detailEntry.type === 'medication_event' && (
               <div>
                 <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1">Medication</p>
-                <p className="text-sm font-medium text-slate-900 mb-3">
+                <p className="text-sm font-medium text-slate-900 mb-3 break-words">
                   {detailEntry.medicationName} {detailEntry.dosage}
                 </p>
                 <div className="bg-orange-50 border border-orange-200 rounded-xl p-3">
@@ -373,7 +373,7 @@ export default function PatientHistory() {
                     <svg className="w-4 h-4 text-orange-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="1.5">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
                     </svg>
-                    <p className="text-sm text-orange-800">Missed dose on {formatDateShort(detailEntry.timestamp)}</p>
+                    <p className="text-sm text-orange-800 break-words">Missed dose on {formatDateShort(detailEntry.timestamp)}</p>
                   </div>
                 </div>
               </div>

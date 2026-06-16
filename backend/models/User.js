@@ -23,6 +23,12 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    profilePicture: {
+      type: String,
+    },
+    profilePicturePublicId: {
+      type: String,
+    },
     age: {
       type: Number,
     },

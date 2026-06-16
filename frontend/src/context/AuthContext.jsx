@@ -24,6 +24,7 @@ export const AuthProvider = ({ children }) => {
           name: userData.name,
           email: userData.email,
           role: userData.role,
+          profilePicture: userData.profilePicture,
         });
       }
     } catch (error) {

@@ -70,8 +70,8 @@ function App() {
           <Route path="/medications" element={<UserRoute><PatientMedications /></UserRoute>} />
           <Route path="/history" element={<UserRoute><PatientHistory /></UserRoute>} />
           <Route path="/user-chat" element={<UserRoute><UserChatPage /></UserRoute>} />
+          <Route path="/my-profile" element={<UserRoute><UserProfile /></UserRoute>} />
         </Route>
-        <Route path="/my-profile" element={<UserProfile />} />
         <Route path="/doctor-status" element={<DoctorRoute requireVerified={false}><DoctorStatus /></DoctorRoute>} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
