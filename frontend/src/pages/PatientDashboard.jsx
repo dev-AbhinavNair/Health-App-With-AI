@@ -100,17 +100,9 @@ export default function PatientDashboard() {
   const totalTaken = medications.reduce((s, m) => s + m.takenToday, 0);
   const totalDoses = medications.reduce((s, m) => s + m.dailyDoses, 0);
 
-  const navItems = [
-    { label: 'Home', icon: 'home', href: '/home', active: true },
-    { label: 'Meds', icon: 'meds', href: '/my-profile' },
-    { label: 'Chat', icon: 'chat', href: '/user-chat' },
-    { label: 'History', icon: 'history', href: null },
-  ];
-
   return (
-    <div className="min-h-screen bg-slate-100 flex flex-col">
-      {/* Main Content */}
-      <div className="flex-1 w-full max-w-md mx-auto px-4 pt-6 pb-28">
+    <div className="flex-1 bg-slate-100">
+      <div className="w-full max-w-md lg:max-w-5xl mx-auto px-4 lg:px-8 pt-6 lg:pt-8 pb-28 lg:pb-8">
         {/* Error Banner */}
         {error && (
           <div className="mb-4 text-sm text-red-600 bg-red-50 border border-red-100 rounded-xl p-3 flex items-center justify-between">
@@ -139,74 +131,77 @@ export default function PatientDashboard() {
           </div>
         </div>
 
-        {/* Next Medication Card */}
-        {loading ? (
-          <div className="bg-slate-200 rounded-2xl h-32 animate-pulse mb-4" />
-        ) : nextMed ? (
-          <div className="bg-blue-600 rounded-2xl p-5 text-white mb-4">
-            <div className="flex items-center gap-2 mb-3">
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="1.5">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              <span className="text-sm font-medium opacity-90">
-                {getTimeUntilNext(getDoseTimes(nextMed.dailyDoses))
-                  ? `Next dose in ${getTimeUntilNext(getDoseTimes(nextMed.dailyDoses))}`
-                  : 'All upcoming doses complete'}
-              </span>
-            </div>
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-lg font-bold">{nextMed.name} {nextMed.dosage}</p>
-                <p className="text-sm opacity-80 mt-0.5">
-                  {getDoseTimes(nextMed.dailyDoses)[getCurrentDoseIndex(getDoseTimes(nextMed.dailyDoses)) + 1] || 'Next dose'}
-                </p>
+        {/* Two-column grid on desktop */}
+        <div className="lg:grid lg:grid-cols-2 lg:gap-4 mb-4">
+          {/* Next Medication Card */}
+          {loading ? (
+            <div className="bg-slate-200 rounded-2xl h-32 animate-pulse mb-4 lg:mb-0" />
+          ) : nextMed ? (
+            <div className="bg-blue-600 rounded-2xl p-5 text-white mb-4 lg:mb-0">
+              <div className="flex items-center gap-2 mb-3">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="1.5">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span className="text-sm font-medium opacity-90">
+                  {getTimeUntilNext(getDoseTimes(nextMed.dailyDoses))
+                    ? `Next dose in ${getTimeUntilNext(getDoseTimes(nextMed.dailyDoses))}`
+                    : 'All upcoming doses complete'}
+                </span>
               </div>
-              <button
-                onClick={() => handleMarkTaken(nextMed.name)}
-                disabled={loggingDose === nextMed.name}
-                className="bg-blue-500 hover:bg-blue-400 disabled:opacity-50 text-white text-sm font-medium rounded-xl px-4 py-2.5 transition-colors cursor-pointer disabled:cursor-not-allowed shrink-0"
-              >
-                {loggingDose === nextMed.name ? 'Logging...' : 'Mark Taken'}
-              </button>
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-lg font-bold">{nextMed.name} {nextMed.dosage}</p>
+                  <p className="text-sm opacity-80 mt-0.5">
+                    {getDoseTimes(nextMed.dailyDoses)[getCurrentDoseIndex(getDoseTimes(nextMed.dailyDoses)) + 1] || 'Next dose'}
+                  </p>
+                </div>
+                <button
+                  onClick={() => handleMarkTaken(nextMed.name)}
+                  disabled={loggingDose === nextMed.name}
+                  className="bg-blue-500 hover:bg-blue-400 disabled:opacity-50 text-white text-sm font-medium rounded-xl px-4 py-2.5 transition-colors cursor-pointer disabled:cursor-not-allowed shrink-0"
+                >
+                  {loggingDose === nextMed.name ? 'Logging...' : 'Mark Taken'}
+                </button>
+              </div>
             </div>
-          </div>
-        ) : medications.length > 0 ? (
-          <div className="bg-green-50 border border-green-200 rounded-2xl p-5 mb-4">
-            <div className="flex items-center gap-2">
-              <svg className="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="1.5">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              <p className="text-sm font-semibold text-green-800">All doses completed for today</p>
+          ) : medications.length > 0 ? (
+            <div className="bg-green-50 border border-green-200 rounded-2xl p-5 mb-4 lg:mb-0">
+              <div className="flex items-center gap-2">
+                <svg className="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="1.5">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <p className="text-sm font-semibold text-green-800">All doses completed for today</p>
+              </div>
             </div>
-          </div>
-        ) : null}
+          ) : null}
 
-        {/* Quick Actions */}
-        <div className="grid grid-cols-2 gap-3 mb-4">
-          <button
-            onClick={() => navigate('/user-chat')}
-            className="bg-white border border-slate-200 rounded-2xl shadow-sm p-4 text-left hover:border-slate-300 transition-colors cursor-pointer"
-          >
-            <div className="w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center mb-3">
-              <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="1.5">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M20.25 8.511c.884.284 1.5 1.128 1.5 2.097v4.286c0 1.136-.847 2.1-1.98 2.193-.34.027-.68.052-1.02.072v3.091l-3-3c-1.354 0-2.694-.055-4.02-.163a2.115 2.115 0 01-.825-.242m9.345-8.334a2.126 2.126 0 00-.476-.095 48.64 48.64 0 00-8.048 0c-1.131.094-1.976 1.057-1.976 2.192v4.286c0 .837.46 1.58 1.155 1.951m9.345-8.334V6.637c0-1.621-1.152-3.026-2.76-3.235A48.455 48.455 0 0011.25 3c-2.115 0-4.198.137-6.24.402-1.608.209-2.76 1.614-2.76 3.235v6.226c0 1.621 1.152 3.026 2.76 3.235.577.075 1.157.14 1.74.194V21l4.155-4.155" />
-              </svg>
-            </div>
-            <p className="text-sm font-semibold text-slate-900">Log Symptoms</p>
-            <p className="text-xs text-slate-500 mt-0.5">Quick check-in</p>
-          </button>
-          <button
-            onClick={() => navigate('/my-profile')}
-            className="bg-white border border-slate-200 rounded-2xl shadow-sm p-4 text-left hover:border-slate-300 transition-colors cursor-pointer"
-          >
-            <div className="w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center mb-3">
-              <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="1.5">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15a2.25 2.25 0 012.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25zM6.75 12h.008v.008H6.75V12zm0 3h.008v.008H6.75V15zm0 3h.008v.008H6.75V18z" />
-              </svg>
-            </div>
-            <p className="text-sm font-semibold text-slate-900">Medications</p>
-            <p className="text-xs text-slate-500 mt-0.5">View schedule</p>
-          </button>
+          {/* Quick Actions */}
+          <div className="grid grid-cols-2 gap-3">
+            <button
+              onClick={() => navigate('/user-chat')}
+              className="bg-white border border-slate-200 rounded-2xl shadow-sm p-4 text-left hover:border-slate-300 transition-colors cursor-pointer"
+            >
+              <div className="w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center mb-3">
+                <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="1.5">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M20.25 8.511c.884.284 1.5 1.128 1.5 2.097v4.286c0 1.136-.847 2.1-1.98 2.193-.34.027-.68.052-1.02.072v3.091l-3-3c-1.354 0-2.694-.055-4.02-.163a2.115 2.115 0 01-.825-.242m9.345-8.334a2.126 2.126 0 00-.476-.095 48.64 48.64 0 00-8.048 0c-1.131.094-1.976 1.057-1.976 2.192v4.286c0 .837.46 1.58 1.155 1.951m9.345-8.334V6.637c0-1.621-1.152-3.026-2.76-3.235A48.455 48.455 0 0011.25 3c-2.115 0-4.198.137-6.24.402-1.608.209-2.76 1.614-2.76 3.235v6.226c0 1.621 1.152 3.026 2.76 3.235.577.075 1.157.14 1.74.194V21l4.155-4.155" />
+                </svg>
+              </div>
+              <p className="text-sm font-semibold text-slate-900">Log Symptoms</p>
+              <p className="text-xs text-slate-500 mt-0.5">Quick check-in</p>
+            </button>
+            <button
+              onClick={() => navigate('/my-profile')}
+              className="bg-white border border-slate-200 rounded-2xl shadow-sm p-4 text-left hover:border-slate-300 transition-colors cursor-pointer"
+            >
+              <div className="w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center mb-3">
+                <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="1.5">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15a2.25 2.25 0 012.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25zM6.75 12h.008v.008H6.75V12zm0 3h.008v.008H6.75V15zm0 3h.008v.008H6.75V18z" />
+                </svg>
+              </div>
+              <p className="text-sm font-semibold text-slate-900">Medications</p>
+              <p className="text-xs text-slate-500 mt-0.5">View schedule</p>
+            </button>
+          </div>
         </div>
 
         {/* Refill Alert */}
@@ -304,60 +299,6 @@ export default function PatientDashboard() {
               })}
             </div>
           )}
-        </div>
-      </div>
-
-      {/* Bottom Navigation */}
-      <div className="fixed bottom-0 inset-x-0 bg-white border-t border-slate-200 z-10">
-        <div className="max-w-md mx-auto flex items-center justify-around px-4">
-          {navItems.map((item) => (
-            item.href ? (
-              <button
-                key={item.label}
-                onClick={() => navigate(item.href)}
-                className={`relative flex flex-col items-center gap-0.5 py-2.5 px-4 cursor-pointer ${
-                  item.href === '/home' && location.pathname === '/home'
-                    ? 'text-blue-600'
-                    : 'text-slate-400 hover:text-slate-600'
-                }`}
-              >
-                {item.icon === 'home' && (
-                  <svg className="w-5 h-5" fill={location.pathname === '/home' ? 'currentColor' : 'none'} stroke="currentColor" viewBox="0 0 24 24" strokeWidth="1.5">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
-                  </svg>
-                )}
-                {item.icon === 'meds' && (
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="1.5">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15a2.25 2.25 0 012.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25zM6.75 12h.008v.008H6.75V12zm0 3h.008v.008H6.75V15zm0 3h.008v.008H6.75V18z" />
-                  </svg>
-                )}
-                {item.icon === 'chat' && (
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="1.5">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M20.25 8.511c.884.284 1.5 1.128 1.5 2.097v4.286c0 1.136-.847 2.1-1.98 2.193-.34.027-.68.052-1.02.072v3.091l-3-3c-1.354 0-2.694-.055-4.02-.163a2.115 2.115 0 01-.825-.242m9.345-8.334a2.126 2.126 0 00-.476-.095 48.64 48.64 0 00-8.048 0c-1.131.094-1.976 1.057-1.976 2.192v4.286c0 .837.46 1.58 1.155 1.951m9.345-8.334V6.637c0-1.621-1.152-3.026-2.76-3.235A48.455 48.455 0 0011.25 3c-2.115 0-4.198.137-6.24.402-1.608.209-2.76 1.614-2.76 3.235v6.226c0 1.621 1.152 3.026 2.76 3.235.577.075 1.157.14 1.74.194V21l4.155-4.155" />
-                  </svg>
-                )}
-                {item.icon === 'history' && (
-                  <svg className="w-5 h-5 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="1.5">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                )}
-                <span className="text-[10px] font-medium">{item.label}</span>
-                {item.href === '/home' && location.pathname === '/home' && (
-                  <span className="w-1 h-1 rounded-full bg-blue-600 absolute bottom-1" />
-                )}
-              </button>
-            ) : (
-              <div
-                key={item.label}
-                className="relative flex flex-col items-center gap-0.5 py-2.5 px-4 text-slate-300 cursor-not-allowed opacity-60"
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="1.5">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                <span className="text-[10px] font-medium">{item.label}</span>
-              </div>
-            )
-          ))}
         </div>
       </div>
     </div>

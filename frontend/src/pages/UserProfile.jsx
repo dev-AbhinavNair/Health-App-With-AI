@@ -98,70 +98,71 @@ export default function UserProfile() {
 
   return (
     <div className="min-h-screen bg-slate-50">
-      <div className="max-w-lg mx-auto px-4 py-8">
+      <div className="max-w-lg lg:max-w-2xl mx-auto px-4 py-8">
         <Link
-          to="/user-chat"
+          to="/home"
           className="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-700 mb-6 transition-colors"
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
             <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
           </svg>
-          Back to Chat
+          Back to Dashboard
         </Link>
 
-        <div className="bg-white border border-slate-200 rounded-2xl shadow-sm p-6">
+        <div className="bg-white border border-slate-200 rounded-2xl shadow-sm p-6 lg:p-8">
           <h1 className="text-2xl font-bold text-slate-900 mb-1">My Health Profile</h1>
           <p className="text-sm text-slate-500 mb-6">This information helps your doctor provide better care.</p>
 
-          {/* Age */}
-          <div className="mb-5">
-            <label className="block text-sm font-medium text-slate-700 mb-1.5">Age</label>
-            <input
-              type="number"
-              value={age}
-              onChange={(e) => setAge(e.target.value)}
-              placeholder="Enter your age"
-              className="w-full px-3 py-2 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-
-          {/* Medical Conditions */}
-          <div className="mb-5">
-            <label className="block text-sm font-medium text-slate-700 mb-1.5">Medical Conditions</label>
-            <div className="flex gap-2 mb-2">
+          {/* Age + Conditions — side by side on desktop */}
+          <div className="lg:grid lg:grid-cols-2 lg:gap-6 mb-5">
+            <div className="mb-5 lg:mb-0">
+              <label className="block text-sm font-medium text-slate-700 mb-1.5">Age</label>
               <input
-                type="text"
-                value={conditionInput}
-                onChange={(e) => setConditionInput(e.target.value)}
-                onKeyDown={(e) => e.key === 'Enter' && addCondition()}
-                placeholder="e.g. Type 2 Diabetes"
-                className="flex-1 px-3 py-2 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                type="number"
+                value={age}
+                onChange={(e) => setAge(e.target.value)}
+                placeholder="Enter your age"
+                className="w-full px-3 py-2 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
-              <button
-                onClick={addCondition}
-                className="px-3 py-2 bg-blue-600 text-white text-sm font-medium rounded-xl hover:bg-blue-700 transition-colors cursor-pointer"
-              >
-                Add
-              </button>
             </div>
-            {conditions.length > 0 && (
-              <div className="flex flex-wrap gap-1.5">
-                {conditions.map((c, i) => (
-                  <span
-                    key={i}
-                    className="inline-flex items-center gap-1 text-xs font-medium bg-blue-100 text-blue-700 px-2.5 py-1 rounded-full"
-                  >
-                    {c}
-                    <button
-                      onClick={() => removeCondition(i)}
-                      className="text-blue-500 hover:text-blue-700 cursor-pointer"
-                    >
-                      &times;
-                    </button>
-                  </span>
-                ))}
+
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-1.5">Medical Conditions</label>
+              <div className="flex gap-2 mb-2">
+                <input
+                  type="text"
+                  value={conditionInput}
+                  onChange={(e) => setConditionInput(e.target.value)}
+                  onKeyDown={(e) => e.key === 'Enter' && addCondition()}
+                  placeholder="e.g. Type 2 Diabetes"
+                  className="flex-1 px-3 py-2 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+                <button
+                  onClick={addCondition}
+                  className="px-3 py-2 bg-blue-600 text-white text-sm font-medium rounded-xl hover:bg-blue-700 transition-colors cursor-pointer"
+                >
+                  Add
+                </button>
               </div>
-            )}
+              {conditions.length > 0 && (
+                <div className="flex flex-wrap gap-1.5">
+                  {conditions.map((c, i) => (
+                    <span
+                      key={i}
+                      className="inline-flex items-center gap-1 text-xs font-medium bg-blue-100 text-blue-700 px-2.5 py-1 rounded-full"
+                    >
+                      {c}
+                      <button
+                        onClick={() => removeCondition(i)}
+                        className="text-blue-500 hover:text-blue-700 cursor-pointer"
+                      >
+                        &times;
+                      </button>
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
 
           {/* Medications */}
@@ -189,30 +190,30 @@ export default function UserProfile() {
                       placeholder="Medication name"
                       className="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
-                    <div className="flex gap-2">
+                    <div className="flex gap-2 flex-wrap">
                       <input
                         type="text"
                         value={med.dosage}
                         onChange={(e) => updateMed(i, 'dosage', e.target.value)}
                         placeholder="Dosage (e.g. 1000mg)"
-                        className="flex-1 px-2.5 py-1.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="flex-1 min-w-[100px] px-2.5 py-1.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                       />
                       <input
                         type="text"
                         value={med.frequency}
                         onChange={(e) => updateMed(i, 'frequency', e.target.value)}
                         placeholder="Frequency (e.g. Daily)"
-                        className="flex-1 px-2.5 py-1.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="flex-1 min-w-[100px] px-2.5 py-1.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      />
+                      <input
+                        type="number"
+                        value={med.dailyDoses ?? 1}
+                        onChange={(e) => updateMed(i, 'dailyDoses', e.target.value)}
+                        placeholder="Doses/day"
+                        min="1"
+                        className="w-24 px-2.5 py-1.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                       />
                     </div>
-                    <input
-                      type="number"
-                      value={med.dailyDoses ?? 1}
-                      onChange={(e) => updateMed(i, 'dailyDoses', e.target.value)}
-                      placeholder="Doses per day"
-                      min="1"
-                      className="w-24 px-2.5 py-1.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
                   </div>
                   <button
                     onClick={() => removeMed(i)}
@@ -225,13 +226,16 @@ export default function UserProfile() {
             </div>
           </div>
 
-          <button
-            onClick={handleSave}
-            disabled={saving}
-            className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-slate-300 text-white font-medium rounded-xl py-2.5 text-sm transition-colors cursor-pointer disabled:cursor-not-allowed mb-6"
-          >
-            {saving ? 'Saving...' : saved ? 'Saved!' : 'Save Profile'}
-          </button>
+          {/* Save — left-aligned on desktop */}
+          <div className="lg:flex lg:items-center lg:gap-4 mb-6">
+            <button
+              onClick={handleSave}
+              disabled={saving}
+              className="w-full lg:w-auto bg-blue-600 hover:bg-blue-700 disabled:bg-slate-300 text-white font-medium rounded-xl py-2.5 px-8 text-sm transition-colors cursor-pointer disabled:cursor-not-allowed"
+            >
+              {saving ? 'Saving...' : saved ? 'Saved!' : 'Save Profile'}
+            </button>
+          </div>
 
           {/* Today's Dose Log */}
           {todayStatus.length > 0 && (

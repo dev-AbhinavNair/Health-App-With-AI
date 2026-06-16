@@ -20,6 +20,7 @@ import DoctorMedicationHistory from './pages/DoctorMedicationHistory';
 import UserProfile from './pages/UserProfile';
 import WelcomePage from './pages/WelcomePage';
 import PatientDashboard from './pages/PatientDashboard';
+import UserLayout from './components/UserLayout';
 import DoctorRoute from './components/DoctorRoute';
 import AdminRoute from './components/AdminRoute';
 import UserRoute from './components/UserRoute';
@@ -52,7 +53,6 @@ function App() {
         <Route path="/reports" element={<AdminRoute><Reports /></AdminRoute>} />
         <Route path="/patients" element={<AdminRoute><UserManagement /></AdminRoute>} />
         <Route path="/audit-logs" element={<AdminRoute><ActivityLogs /></AdminRoute>} />
-        <Route path="/user-chat" element={<UserRoute><UserChatPage /></UserRoute>} />
         <Route path="/doctor/patients" element={<DoctorRoute><DoctorPatientList /></DoctorRoute>} />
         <Route path="/doctor/patients/:id" element={<DoctorRoute><DoctorPatientDetail /></DoctorRoute>} />
         <Route path="/doctor/urgent" element={<DoctorRoute><DoctorUrgentCases /></DoctorRoute>} />
@@ -63,7 +63,10 @@ function App() {
         <Route path="/doctor-verification" element={<DoctorVerification />} />
         <Route path="/doctor-verification/documents" element={<DoctorRoute requireVerified={false}><DocumentUpload /></DoctorRoute>} />
         <Route path="/welcome" element={<WelcomePage />} />
-        <Route path="/home" element={<UserRoute><PatientDashboard /></UserRoute>} />
+        <Route element={<UserLayout />}>
+          <Route path="/home" element={<UserRoute><PatientDashboard /></UserRoute>} />
+          <Route path="/user-chat" element={<UserRoute><UserChatPage /></UserRoute>} />
+        </Route>
         <Route path="/my-profile" element={<UserProfile />} />
         <Route path="/doctor-status" element={<DoctorRoute requireVerified={false}><DoctorStatus /></DoctorRoute>} />
         <Route path="*" element={<Navigate to="/" replace />} />
