@@ -20,6 +20,7 @@ import DoctorMedicationHistory from './pages/DoctorMedicationHistory';
 import UserProfile from './pages/UserProfile';
 import WelcomePage from './pages/WelcomePage';
 import PatientDashboard from './pages/PatientDashboard';
+import PatientMedications from './pages/PatientMedications';
 import UserLayout from './components/UserLayout';
 import DoctorRoute from './components/DoctorRoute';
 import AdminRoute from './components/AdminRoute';
@@ -65,6 +66,7 @@ function App() {
         <Route path="/welcome" element={<WelcomePage />} />
         <Route element={<UserLayout />}>
           <Route path="/home" element={<UserRoute><PatientDashboard /></UserRoute>} />
+          <Route path="/medications" element={<UserRoute><PatientMedications /></UserRoute>} />
           <Route path="/user-chat" element={<UserRoute><UserChatPage /></UserRoute>} />
         </Route>
         <Route path="/my-profile" element={<UserProfile />} />

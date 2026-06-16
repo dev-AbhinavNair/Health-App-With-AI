@@ -36,6 +36,8 @@ const userSchema = new mongoose.Schema(
         dosage: { type: String },
         frequency: { type: String },
         dailyDoses: { type: Number, default: 1 },
+        purpose: { type: String },
+        refillDate: { type: Date },
       },
     ],
     otp: {
