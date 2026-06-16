@@ -12,6 +12,7 @@ const verificationRoutes = require("./routes/verificationRoutes");
 const userRoutes = require("./routes/userRoutes");
 const doctorRoutes = require("./routes/doctorRoutes");
 const medicationRoutes = require("./routes/medicationRoutes");
+const historyRoutes = require("./routes/historyRoutes");
 
 connectDB();
 
@@ -27,6 +28,7 @@ app.use("/api/verification", verificationRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/doctors", doctorRoutes);
 app.use("/api/medications", medicationRoutes);
+app.use("/api/history", historyRoutes);
 
 app.get("/", (req, res) => {
   res.send("running");

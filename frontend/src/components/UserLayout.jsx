@@ -5,7 +5,7 @@ const navItems = [
   { label: 'Home', icon: 'home', path: '/home' },
   { label: 'Meds', icon: 'meds', path: '/medications' },
   { label: 'Chat', icon: 'chat', path: '/user-chat' },
-  { label: 'History', icon: 'history', path: null },
+  { label: 'History', icon: 'history', path: '/history' },
 ];
 
 const iconMap = {
