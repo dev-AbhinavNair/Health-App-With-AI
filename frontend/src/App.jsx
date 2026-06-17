@@ -17,6 +17,7 @@ import DoctorUrgentCases from './pages/DoctorUrgentCases';
 import DoctorArchivedCases from './pages/DoctorArchivedCases';
 import DoctorSymptomTrends from './pages/DoctorSymptomTrends';
 import DoctorMedicationHistory from './pages/DoctorMedicationHistory';
+import DoctorProfile from './pages/DoctorProfile';
 import UserProfile from './pages/UserProfile';
 import WelcomePage from './pages/WelcomePage';
 import PatientDashboard from './pages/PatientDashboard';
@@ -61,6 +62,7 @@ function App() {
         <Route path="/doctor/archived" element={<DoctorRoute><DoctorArchivedCases /></DoctorRoute>} />
         <Route path="/doctor/symptoms" element={<DoctorRoute><DoctorSymptomTrends /></DoctorRoute>} />
         <Route path="/doctor/medications" element={<DoctorRoute><DoctorMedicationHistory /></DoctorRoute>} />
+        <Route path="/doctor/profile" element={<DoctorRoute><DoctorProfile /></DoctorRoute>} />
         <Route path="/doctor-signup" element={<DoctorSignup />} />
         <Route path="/doctor-verification" element={<DoctorVerification />} />
         <Route path="/doctor-verification/documents" element={<DoctorRoute requireVerified={false}><DocumentUpload /></DoctorRoute>} />

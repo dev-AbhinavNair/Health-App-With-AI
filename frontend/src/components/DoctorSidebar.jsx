@@ -55,6 +55,11 @@ export default function DoctorSidebar() {
         <path strokeLinecap="round" strokeLinejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5m8.25 3v6.75m0 0l-3-3m3 3l3-3M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" />
       </svg>
     ),
+    profile: (
+      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="1.5">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+      </svg>
+    ),
   };
 
   return (
@@ -95,9 +100,16 @@ export default function DoctorSidebar() {
       <div className="m-4 p-4 bg-slate-800/40 border border-slate-700/50 rounded-2xl">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3 min-w-0">
-            <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white text-sm font-semibold shrink-0">
-              {initials || 'DR'}
-            </div>
+            <button
+              onClick={() => navigate('/doctor/profile')}
+              className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white text-sm font-semibold shrink-0 overflow-hidden cursor-pointer hover:ring-2 hover:ring-blue-300 transition-all"
+            >
+              {user?.profilePicture ? (
+                <img src={user.profilePicture} alt="" className="w-full h-full object-cover" />
+              ) : (
+                initials || 'DR'
+              )}
+            </button>
             <div className="overflow-hidden">
               <p className="text-sm font-semibold text-white truncate">{user?.name || 'Doctor'}</p>
               <p className="text-xs text-slate-400 truncate">{user?.email || 'doctor@example.com'}</p>
@@ -105,6 +117,15 @@ export default function DoctorSidebar() {
           </div>
           <button onClick={handleLogout} className="p-2 shrink-0 text-slate-400 hover:text-red-400 transition-colors" title="Sign Out">
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+          </button>
+        </div>
+        <div className="mt-3 pt-3 border-t border-slate-700/50">
+          <button
+            onClick={() => navigate('/doctor/profile')}
+            className="flex items-center gap-2 text-xs text-slate-400 hover:text-white transition-colors cursor-pointer w-full"
+          >
+            {iconMap.profile}
+            My Profile
           </button>
         </div>
       </div>

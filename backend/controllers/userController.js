@@ -15,13 +15,14 @@ const getProfile = async (req, res) => {
 
 const updateProfile = async (req, res) => {
   try {
-    const { age, medicalConditions, medications } = req.body;
+    const { name, age, medicalConditions, medications } = req.body;
 
     const user = await User.findById(req.user._id);
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
 
+    if (name !== undefined) user.name = name;
     if (age !== undefined) user.age = age;
     if (medicalConditions !== undefined) user.medicalConditions = medicalConditions;
     if (medications !== undefined) user.medications = medications;
