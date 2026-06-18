@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import api from "../api";
 
 const WELCOME_MESSAGE = {
   _id: "welcome",
@@ -37,39 +38,21 @@ export default function UserChatPage() {
 
   const initChat = async () => {
     try {
-      const res = await fetch("/api/chats", {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      });
-      if (!res.ok) throw new Error("Failed to fetch chats");
-      const chats = await res.json();
+      const chatsRes = await api.get("/chats");
+      const chats = chatsRes.data;
       const active = chats.find((c) => c.status === "active");
 
       if (active) {
         setChat(active);
-        const detailRes = await fetch(`/api/chats/${active._id}`, {
-          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-        });
-        if (detailRes.ok) {
-          const data = await detailRes.json();
-          setMessages(data.messages || []);
-        }
+        const detailRes = await api.get(`/chats/${active._id}`);
+        setMessages(detailRes.data.messages || []);
         setLoading(false);
         return;
       }
 
-      const createRes = await fetch("/api/chats", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-        body: JSON.stringify({ title: "Health Consultation" }),
-      });
-      if (createRes.ok) {
-        const newChat = await createRes.json();
-        setChat(newChat);
-        setMessages([]);
-      }
+      const createRes = await api.post("/chats", { title: "Health Consultation" });
+      setChat(createRes.data);
+      setMessages([]);
     } catch (err) {
       console.error("Error initializing chat:", err);
     } finally {
@@ -81,12 +64,9 @@ export default function UserChatPage() {
     if (!chat) return;
     setAiThinking(true);
     try {
-      const res = await fetch(`/api/chats/${chat._id}/ai-respond`, {
-        method: "POST",
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      });
-      if (res.ok) {
-        const data = await res.json();
+      const res = await api.post(`/chats/${chat._id}/ai-respond`);
+      if (res.status === 200) {
+        const data = res.data;
 
         const aiMsg = {
           _id: "ai-" + Date.now(),
@@ -123,19 +103,9 @@ export default function UserChatPage() {
     const content = inputValue.trim();
     setSending(true);
     try {
-      const res = await fetch(`/api/chats/${chat._id}/messages`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-        body: JSON.stringify({ content }),
-      });
-      if (res.ok) {
-        const msg = await res.json();
-        setMessages((prev) => [...prev, msg]);
-        setInputValue("");
-      }
+      const msgRes = await api.post(`/chats/${chat._id}/messages`, { content });
+      setMessages((prev) => [...prev, msgRes.data]);
+      setInputValue("");
     } catch (err) {
       console.error("Error sending message:", err);
     } finally {
