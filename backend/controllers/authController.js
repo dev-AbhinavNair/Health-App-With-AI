@@ -93,7 +93,7 @@ const requestOTP = async (req, res) => {
 
     console.log(`OTP for ${email}: ${otp}`);
 
-    await transporter.sendMail(mailOptions);
+    transporter.sendMail(mailOptions).catch(err => console.error('Email send failed:', err));
 
     res.status(200).json({ message: "OTP sent to your email" });
   } catch (error) {
