@@ -149,7 +149,7 @@ export default function UserChatPage() {
   const isCompleted = chat?.status === "completed";
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col pb-[72px] lg:pb-0">
+    <div className="h-full bg-slate-50 flex flex-col pb-[72px] lg:pb-0">
       {/* ── Header ── */}
       <header className="h-12 bg-white border-b border-slate-200 flex items-center justify-center px-4 sticky top-0 z-10">
         <h1 className="text-base font-semibold text-slate-800">Symptom Chat</h1>

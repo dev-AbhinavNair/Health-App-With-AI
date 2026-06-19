@@ -71,7 +71,7 @@ export default function PatientMedications() {
 
   if (loading) {
     return (
-      <div className="flex-1 bg-slate-100">
+    <div className="flex-1 bg-slate-100 overflow-y-auto">
         <div className="max-w-md lg:max-w-5xl mx-auto px-4 lg:px-8 pt-6 pb-28 lg:pb-8 space-y-4">
           <div className="h-10 bg-slate-200 rounded-xl animate-pulse" />
           <div className="h-28 bg-slate-200 rounded-2xl animate-pulse" />

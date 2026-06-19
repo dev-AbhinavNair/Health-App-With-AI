@@ -65,7 +65,7 @@ export default function UserLayout() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-100 flex">
+    <div className="h-screen bg-slate-100 flex">
       {/* ── Desktop Sidebar ── */}
       <aside className="hidden lg:flex w-[240px] h-screen bg-[#0B132B] flex-col shrink-0">
         <div className="px-6 pt-6 pb-4">
@@ -130,7 +130,7 @@ export default function UserLayout() {
       </aside>
 
       {/* ── Content ── */}
-      <main className="flex-1 flex flex-col min-h-screen">
+      <main className="flex-1 flex flex-col overflow-hidden">
         <Outlet />
       </main>
 

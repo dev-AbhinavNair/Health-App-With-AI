@@ -100,7 +100,7 @@ export default function PatientHistory() {
   const isSummaryEmpty = activeTab === 'doctor_summary' && entries.length === 0;
 
   return (
-    <div className="flex-1 w-full bg-slate-50 overflow-x-hidden">
+    <div className="flex-1 w-full bg-slate-50 overflow-x-hidden overflow-y-auto">
       <div className="w-full lg:max-w-4xl mx-auto px-4 lg:px-8 pt-6 pb-28 lg:pb-8">
         {/* Header */}
         <div className="flex items-center justify-between mb-5">
