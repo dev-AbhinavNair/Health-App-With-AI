@@ -10,6 +10,10 @@ const FALLBACK_AI_API_URL = process.env.FALLBACK_AI_API_URL || "";
 const FALLBACK_AI_API_KEY = process.env.FALLBACK_AI_API_KEY || "";
 const FALLBACK_AI_MODEL = process.env.FALLBACK_AI_MODEL || "";
 
+const HF_API_URL = process.env.HUGGINGFACE_API_URL || "";
+const HF_API_KEY = process.env.HUGGINGFACE_API_KEY || "";
+const HF_MODEL = process.env.HUGGINGFACE_MODEL || "";
+
 const defaultPrompt = `You are a medical triage assistant. Your role is to:
 1. Analyze the user's symptoms and concerns described in the conversation
 2. Provide a concise medical summary of the patient's condition
@@ -46,31 +50,64 @@ const callProvider = async (url, apiKey, model, messages, options = {}) => {
   };
   if (model) requestBody.model = model;
 
-  try {
-    const response = await axios.post(url, requestBody, {
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-        "Content-Type": "application/json",
-      },
-      timeout: options.timeout || 60000,
-    });
-    return response.data;
-  } catch (error) {
-    if (error.code === "ECONNABORTED") {
-      return { error: "timeout" };
+  const classifyError = (err) => {
+    if (err.code === "ECONNABORTED") return "timeout";
+    const status = err.response?.status;
+    if (status === 429) return "rate_limited";
+    if (status === 503 || status === 502 || status === 504) return "overloaded";
+    return "unknown";
+  };
+
+  for (let attempt = 1; attempt <= 2; attempt++) {
+    try {
+      const response = await axios.post(url, requestBody, {
+        headers: {
+          Authorization: `Bearer ${apiKey}`,
+          "Content-Type": "application/json",
+        },
+        timeout: options.timeout || 60000,
+      });
+      return response.data;
+    } catch (error) {
+      if (error.response?.status === 401 || error.response?.status === 403) {
+        console.warn(`AI Provider auth error (${error.response.status}): ${url}`);
+        return { error: "auth_error" };
+      }
+      if (attempt < 2) {
+        await new Promise((r) => setTimeout(r, 1000));
+        continue;
+      }
+      const errType = classifyError(error);
+      console.error(`AI Provider error (${errType}): ${url}`, error.response?.data || error.message);
+      return { error: errType };
     }
-    const status = error.response?.status;
-    if (status === 429) {
-      console.warn(`AI Provider rate limited: ${url}`);
-      return { error: "rate_limited" };
-    }
-    if (status === 401 || status === 403) {
-      console.warn(`AI Provider auth error (${status}): ${url}`);
-      return { error: "auth_error" };
-    }
-    console.error(`AI Provider error (${status || "network"}): ${url}`, error.response?.data || error.message);
-    return { error: "unknown" };
   }
+};
+
+const getProviders = () => {
+  const providers = [
+    { url: AI_API_URL, key: AI_API_KEY, model: AI_MODEL, name: "Groq (primary)" },
+  ];
+  if (AI_API_KEY) {
+    providers.push({ url: AI_API_URL, key: AI_API_KEY, model: "mixtral-8x7b-32768", name: "Groq (mixtral)" });
+  }
+  if (HF_API_KEY) {
+    providers.push({ url: HF_API_URL, key: HF_API_KEY, model: HF_MODEL, name: "HuggingFace" });
+  }
+  if (FALLBACK_AI_API_KEY) {
+    providers.push({ url: FALLBACK_AI_API_URL, key: FALLBACK_AI_API_KEY, model: FALLBACK_AI_MODEL, name: "OpenRouter" });
+  }
+  return providers;
+};
+
+const tryProviders = async (messages, opts) => {
+  const providers = getProviders();
+  for (const p of providers) {
+    const result = await callProvider(p.url, p.key, p.model, messages, opts);
+    if (!result.error) return result;
+    console.log(`Provider "${p.name}" failed (${result.error}), trying next`);
+  }
+  return { error: "all_providers_failed" };
 };
 
 const generateSummary = async (conversation) => {
@@ -86,13 +123,7 @@ const generateSummary = async (conversation) => {
 
   const opts = { temperature: 0.3, max_tokens: 1200 };
 
-  let result = await callProvider(AI_API_URL, AI_API_KEY, AI_MODEL, messages, opts);
-  if (result.error) {
-    if (FALLBACK_AI_API_KEY) {
-      console.log(`Primary AI failed (${result.error}), trying fallback`);
-      result = await callProvider(FALLBACK_AI_API_URL, FALLBACK_AI_API_KEY, FALLBACK_AI_MODEL, messages, opts);
-    }
-  }
+  const result = await tryProviders(messages, opts);
 
   if (result.error) {
     console.error("All AI providers failed");
@@ -231,22 +262,13 @@ const generateConversationResponse = async (conversation, patientContext = null)
     })),
   ];
 
-  if (!AI_API_KEY && !FALLBACK_AI_API_KEY) {
+  if (!AI_API_KEY && !HF_API_KEY && !FALLBACK_AI_API_KEY) {
     return { type: "unavailable", message: "AI health assistant is currently unavailable. Please consult with a healthcare provider directly." };
   }
 
   const opts = { temperature: 0.3, max_tokens: 1200 };
 
-  let result = await callProvider(AI_API_URL, AI_API_KEY, AI_MODEL, messages, opts);
-  if (result.error) {
-    if (FALLBACK_AI_API_KEY) {
-      console.log(`Primary AI failed (${result.error}), trying fallback`);
-      result = await callProvider(FALLBACK_AI_API_URL, FALLBACK_AI_API_KEY, FALLBACK_AI_MODEL, messages, opts);
-      if (result.error) {
-        console.warn(`Fallback AI also failed (${result.error})`);
-      }
-    }
-  }
+  let result = await tryProviders(messages, opts);
 
   if (!result.error) {
     const content = result.choices?.[0]?.message?.content;
