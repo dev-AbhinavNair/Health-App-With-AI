@@ -145,7 +145,7 @@ export default function PatientMedications() {
         </div>
 
         {/* AI Recommendations */}
-        {recommendations && (
+        {!hasAiData && recommendations && (
           <div className="bg-blue-50 border border-blue-200 rounded-2xl p-4 lg:p-5 mb-5">
             <div className="flex items-start gap-3">
               <div className="w-9 h-9 rounded-xl bg-blue-100 flex items-center justify-center text-blue-600 shrink-0">
