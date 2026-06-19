@@ -95,6 +95,7 @@ export default function DoctorManagement() {
                 <div key={doc._id} onClick={() => setSelectedDoc(doc._id)} className={`p-4 border-b border-slate-200 cursor-pointer flex justify-between items-center transition-colors ${selectedDoc === doc._id ? 'bg-blue-50 border-l-4 border-l-blue-600' : 'hover:bg-slate-50 border-l-4 border-l-transparent'}`}>
                     <div>
                       <p className="font-semibold text-slate-900">{doc.name}</p>
+                      <p className="text-sm text-slate-500 mt-0.5">{doc.specialty || <NA />}</p>
                     <p className="text-sm text-slate-500 mt-1">
                       {doc.email || <NA />} &bull; {doc.patientCount != null ? `${doc.patientCount} Patients` : <NA />}
                     </p>
@@ -142,6 +143,10 @@ export default function DoctorManagement() {
                 <div>
                   <h3 className="text-lg font-semibold text-slate-900 mb-4 border-b pb-2">Activity Details</h3>
                   <div className="space-y-4">
+                    <div className="flex justify-between border-b border-slate-100 pb-2">
+                      <span className="text-sm text-slate-500">Specialty</span>
+                      <span className="text-sm font-medium text-slate-900">{selected.specialty || <NA />}</span>
+                    </div>
                     <div className="flex justify-between border-b border-slate-100 pb-2">
                       <span className="text-sm text-slate-500">Status</span>
                       <span className={`px-2 py-0.5 rounded-full text-sm font-semibold ${selected.isBanned ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'}`}>
