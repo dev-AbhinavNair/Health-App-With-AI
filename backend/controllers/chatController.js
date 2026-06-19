@@ -375,9 +375,9 @@ const aiRespond = async (req, res) => {
       });
 
       chat.aiSummary = aiResult.summary;
-      chat.aiRecommendations = Array.isArray(aiResult.recommendations)
+      chat.aiRecommendations = Array.isArray(aiResult.recommendations) && aiResult.recommendations.length > 0
         ? aiResult.recommendations.map((r, i) => `${i + 1}. ${r}`).join('\n')
-        : aiResult.recommendations;
+        : (aiResult.recommendations || "Please consult with a healthcare provider.");
       chat.symptoms = (aiResult.symptoms || []).map((s) => ({
         name: s.name || "",
         duration: s.duration || "",

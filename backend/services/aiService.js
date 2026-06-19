@@ -278,7 +278,7 @@ const parseConversationResponse = (raw) => {
     }
     if (parsed.type === "ready") {
       const recs = parsed.recommendations;
-      const recommendations = Array.isArray(recs)
+      const recommendations = Array.isArray(recs) && recs.length > 0
         ? recs.map((r, i) => `${i + 1}. ${r}`).join('\n')
         : (recs || "Please consult with a healthcare provider.");
       return {

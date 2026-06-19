@@ -116,12 +116,25 @@ export default function DoctorArchivedCases() {
                   </div>
                 </div>
 
-                <p className="text-sm text-slate-700 mt-3">
-                  {c.title || <NA />}
-                </p>
+                <div className="flex items-center gap-2 mt-3">
+                  <p className="text-sm text-slate-700 font-medium">
+                    {c.title || <NA />}
+                  </p>
+                  {c.symptoms?.length > 0 && (
+                    <span className={`px-2 py-0.5 rounded-full text-xs font-semibold ${
+                      Math.max(...c.symptoms.map(s => Number(s.severity || 0))) >= 7
+                        ? 'bg-red-100 text-red-700'
+                        : Math.max(...c.symptoms.map(s => Number(s.severity || 0))) >= 4
+                        ? 'bg-orange-100 text-orange-700'
+                        : 'bg-yellow-100 text-yellow-700'
+                    }`}>
+                      {(Math.max(...c.symptoms.map(s => Number(s.severity || 0))) >= 7 ? 'High' : Math.max(...c.symptoms.map(s => Number(s.severity || 0))) >= 4 ? 'Moderate' : 'Mild')}
+                    </span>
+                  )}
+                </div>
 
                 {c.symptoms?.length > 0 && (
-                  <div className="flex flex-wrap gap-1.5 mt-3">
+                  <div className="flex flex-wrap gap-1.5 mt-2">
                     {c.symptoms.map((s, i) => (
                       <span key={i} className="inline-flex items-center gap-1 px-2 py-0.5 bg-slate-100 rounded-full text-xs text-slate-600">
                         {s.name}
@@ -130,11 +143,21 @@ export default function DoctorArchivedCases() {
                   </div>
                 )}
 
-                <div className="flex items-center gap-1.5 mt-3 text-xs text-slate-400">
-                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                  Duration: {c.durationDays || 0} days
+                <div className="flex items-center gap-4 mt-3 text-xs text-slate-400">
+                  <div className="flex items-center gap-1">
+                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    {c.durationDays || 0} days
+                  </div>
+                  {c.aiSummary && (
+                    <span className="text-slate-400 truncate max-w-[200px]">{c.aiSummary}</span>
+                  )}
+                  {c.aiRecommendations && (
+                    <span className="text-blue-600 font-medium">
+                      {(c.aiRecommendations.match(/\d+\.\s/g) || []).length} recommendations
+                    </span>
+                  )}
                 </div>
               </Link>
             ))}

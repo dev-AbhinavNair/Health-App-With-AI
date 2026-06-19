@@ -16,9 +16,11 @@ export default function PatientMedications() {
   const [loading, setLoading] = useState(true);
   const [logging, setLogging] = useState(null);
   const [error, setError] = useState('');
+  const [recommendations, setRecommendations] = useState(null);
 
   useEffect(() => {
     fetchOverview();
+    fetchRecommendations();
   }, []);
 
   const fetchOverview = async () => {
@@ -32,6 +34,16 @@ export default function PatientMedications() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const fetchRecommendations = async () => {
+    try {
+      const res = await api.get('/history', { params: { category: 'doctor_summary', limit: 1 } });
+      const latest = res.data.entries?.[0];
+      if (latest?.recommendations) {
+        setRecommendations(latest.recommendations);
+      }
+    } catch {}
   };
 
   const handleMarkTaken = async (medicationName) => {
@@ -121,6 +133,23 @@ export default function PatientMedications() {
             Add Med
           </button>
         </div>
+
+        {/* AI Recommendations */}
+        {recommendations && (
+          <div className="bg-blue-50 border border-blue-200 rounded-2xl p-4 lg:p-5 mb-5">
+            <div className="flex items-start gap-3">
+              <div className="w-9 h-9 rounded-xl bg-blue-100 flex items-center justify-center text-blue-600 shrink-0">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
+                </svg>
+              </div>
+              <div className="min-w-0 flex-1">
+                <h3 className="font-semibold text-blue-900 text-sm">AI Recommendations</h3>
+                <p className="text-sm text-blue-800 mt-1.5 whitespace-pre-line leading-relaxed">{recommendations}</p>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* 2-column grid on desktop */}
         <div className="lg:grid lg:grid-cols-2 lg:gap-4 mb-4">
