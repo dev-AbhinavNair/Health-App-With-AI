@@ -97,10 +97,11 @@ export default function DoctorPatientDetail() {
     if (!chatId) return;
     setSaving(true);
     try {
-      await api.put(`/chats/${chatId}/review`, { aiRecommendations: editedRecs });
+      const recs = editedRecs || chat?.aiRecommendations || '';
+      await api.put(`/chats/${chatId}/review`, { aiRecommendations: recs });
       setData((prev) => ({
         ...prev,
-        latestChat: { ...prev.latestChat, aiRecommendations: editedRecs },
+        latestChat: { ...prev.latestChat, aiRecommendations: recs },
       }));
       setEditing(false);
     } catch (err) {
@@ -114,11 +115,12 @@ export default function DoctorPatientDetail() {
     if (!chatId) return;
     setSaving(true);
     try {
-      await api.put(`/chats/${chatId}/review`, { aiRecommendations: editedRecs });
+      const recs = editedRecs || chat?.aiRecommendations || '';
+      await api.put(`/chats/${chatId}/review`, { aiRecommendations: recs });
       await api.put(`/chats/${chatId}/forward`);
       setData((prev) => ({
         ...prev,
-        latestChat: { ...prev.latestChat, aiRecommendations: editedRecs, status: 'completed', isForwarded: true },
+        latestChat: { ...prev.latestChat, aiRecommendations: recs, status: 'completed', isForwarded: true },
       }));
       setEditing(false);
     } catch (err) {
