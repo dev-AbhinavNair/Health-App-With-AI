@@ -6,7 +6,6 @@ const navItems = [
   { label: 'Meds', icon: 'meds', path: '/medications' },
   { label: 'Chat', icon: 'chat', path: '/user-chat' },
   { label: 'History', icon: 'history', path: '/history' },
-  { label: 'Profile', icon: 'profile', path: '/my-profile' },
 ];
 
 const iconMap = {
@@ -163,6 +162,19 @@ export default function UserLayout() {
               </div>
             );
           })}
+          {/* Profile — always last */}
+          <button
+            onClick={() => navigate('/my-profile')}
+            className={`relative flex flex-col items-center gap-0.5 py-2.5 px-4 cursor-pointer ${
+              location.pathname === '/my-profile' ? 'text-blue-600' : 'text-slate-400 hover:text-slate-600'
+            }`}
+          >
+            {location.pathname === '/my-profile' ? iconMap.profile : (
+              <span className="text-slate-400">{iconMap.profile}</span>
+            )}
+            <span className="text-[10px] font-medium">Profile</span>
+            {location.pathname === '/my-profile' && <span className="w-1 h-1 rounded-full bg-blue-600 absolute -bottom-0.5" />}
+          </button>
         </div>
       </nav>
     </div>

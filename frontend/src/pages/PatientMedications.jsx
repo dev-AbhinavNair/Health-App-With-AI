@@ -38,10 +38,10 @@ export default function PatientMedications() {
 
   const fetchRecommendations = async () => {
     try {
-      const res = await api.get('/history', { params: { category: 'doctor_summary', limit: 1 } });
-      const latest = res.data.entries?.[0];
-      if (latest?.recommendations) {
-        setRecommendations(latest.recommendations);
+      const res = await api.get('/chats');
+      const withRecs = res.data.find(c => c.aiRecommendations);
+      if (withRecs?.aiRecommendations) {
+        setRecommendations(withRecs.aiRecommendations);
       }
     } catch {}
   };
