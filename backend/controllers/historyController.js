@@ -16,7 +16,7 @@ const getHistory = async (req, res) => {
       status: { $in: ["reviewed", "completed"] },
     };
     const chats = await Chat.find(chatFilter)
-      .populate("doctor", "name")
+      .populate("doctor", "name specialty")
       .sort({ updatedAt: -1 });
 
     for (const chat of chats) {
@@ -30,7 +30,7 @@ const getHistory = async (req, res) => {
           preview: chat.aiSummary.slice(0, 120) + (chat.aiSummary.length > 120 ? "..." : ""),
           severity: chat.severity,
           statusBadge: chat.doctor
-            ? { label: `Reviewed by ${chat.doctor.name}`, color: "blue" }
+            ? { label: `Reviewed by ${chat.doctor.name}${chat.doctor.specialty ? ` (${chat.doctor.specialty})` : ''}`, color: "blue" }
             : null,
           chatId: chat._id,
           summary: chat.aiSummary,
@@ -51,7 +51,9 @@ const getHistory = async (req, res) => {
             timestamp: msg.createdAt || chat.createdAt,
             preview: msg.content.slice(0, 100) + (msg.content.length > 100 ? "..." : ""),
             severity: chat.severity,
-            chatId: chat._id,
+          doctorName: chat.doctor?.name || null,
+          doctorSpecialty: chat.doctor?.specialty || null,
+          chatId: chat._id,
             messageContent: msg.content,
           });
         }

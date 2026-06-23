@@ -52,7 +52,7 @@ const getPatientDetail = async (req, res) => {
       user: patientId,
       doctor: req.user._id,
     })
-      .populate("doctor", "name");
+      .populate("doctor", "name specialty");
 
     const priority = { pending_review: 0, reviewed: 1, active: 2, completed: 3 };
     allChats.sort((a, b) => {

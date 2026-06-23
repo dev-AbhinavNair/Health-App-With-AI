@@ -268,7 +268,9 @@ export default function UserChatPage() {
                           AI-Generated Summary
                         </h3>
                         <p className="text-xs text-slate-500">
-                          This is what will be sent to your doctor:
+                          {chat.doctor
+                            ? `This will be sent to Dr. ${chat.doctor.name}${chat.doctor.specialty ? ` (${chat.doctor.specialty})` : ''}`
+                            : "This is what will be sent to your doctor:"}
                         </p>
                       </div>
                     </div>
@@ -303,9 +305,9 @@ export default function UserChatPage() {
                             : "bg-green-50 border border-green-200 text-green-700"
                       }`}
                     >
-                      {isPendingReview && "Summary sent to doctor for review"}
-                      {isReviewed && "Doctor has reviewed your case"}
-                      {isCompleted && "Recommendations forwarded to you \u2713"}
+                      {isPendingReview && `Summary sent to Dr. ${chat.doctor?.name || 'doctor'} for review`}
+                      {isReviewed && `Reviewed by Dr. ${chat.doctor?.name || 'doctor'}${chat.doctor?.specialty ? ` (${chat.doctor?.specialty})` : ''}`}
+                      {isCompleted && `Recommendations forwarded by Dr. ${chat.doctor?.name || 'doctor'} \u2713`}
                     </div>
                   </div>
                 )}

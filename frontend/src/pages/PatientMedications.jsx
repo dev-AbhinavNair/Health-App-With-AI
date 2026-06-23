@@ -155,6 +155,12 @@ export default function PatientMedications() {
               </div>
               <div className="min-w-0 flex-1">
                 <h3 className="font-semibold text-blue-900 text-sm">AI Recommendations</h3>
+                {latestChat?.doctor && (
+                  <p className="text-xs text-blue-600 mt-0.5">
+                    Assigned to Dr. {latestChat.doctor.name}
+                    {latestChat.doctor.specialty && <span> ({latestChat.doctor.specialty})</span>}
+                  </p>
+                )}
                 <p className="text-sm text-blue-800 mt-1.5 whitespace-pre-line leading-relaxed">{recommendations}</p>
               </div>
             </div>
@@ -200,6 +206,12 @@ export default function PatientMedications() {
                   </div>
                   <h3 className="text-sm font-semibold text-slate-900">Assessment</h3>
                 </div>
+                {latestChat?.doctor && (
+                  <p className="text-xs text-blue-600 mb-3">
+                    Reviewed by Dr. {latestChat.doctor.name}
+                    {latestChat.doctor.specialty && <span> ({latestChat.doctor.specialty})</span>}
+                  </p>
+                )}
                 <div className="flex items-center gap-2 mb-3">
                   <span className="text-xs text-slate-500">Severity:</span>
                   <span className={`px-2 py-0.5 rounded-full text-xs font-semibold ${

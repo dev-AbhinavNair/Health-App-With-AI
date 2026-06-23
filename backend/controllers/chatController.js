@@ -27,7 +27,7 @@ const getUserChats = async (req, res) => {
     if (req.user.role === "user") {
       chats = await Chat.find({ user: req.user._id })
         .populate("user", "name")
-        .populate("doctor", "name")
+        .populate("doctor", "name specialty")
         .sort("-updatedAt");
     } else {
       const { doctorId, status } = req.query;
@@ -38,7 +38,7 @@ const getUserChats = async (req, res) => {
 
       chats = await Chat.find(filter)
         .populate("user", "name")
-        .populate("doctor", "name")
+        .populate("doctor", "name specialty")
         .sort("-updatedAt");
     }
 
@@ -52,7 +52,7 @@ const getChatById = async (req, res) => {
   try {
     const chat = await Chat.findById(req.params.id)
       .populate("user", "name")
-      .populate("doctor", "name");
+      .populate("doctor", "name specialty");
 
     if (!chat) {
       return res.status(404).json({ message: "Chat not found" });
@@ -279,7 +279,7 @@ const assignDoctor = async (req, res) => {
 
     const populatedChat = await Chat.findById(chat._id)
       .populate("user", "name")
-      .populate("doctor", "name");
+      .populate("doctor", "name specialty");
 
     res.json(populatedChat);
   } catch (error) {
