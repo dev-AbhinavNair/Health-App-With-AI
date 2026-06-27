@@ -25,7 +25,7 @@ const {
 } = require("../controllers/aiPromptController");
 
 router.use(protect);
-router.use(authorize("admin"));
+router.use(authorize("admin", "super_admin"));
 
 router.get("/users", getUsers);
 router.put("/users/:id/ban", toggleBanStatus);
@@ -47,6 +47,6 @@ router.get("/ai-monitoring/flagged", getFlagged);
 router.put("/ai-monitoring/flagged/:id/action", updateFlaggedStatus);
 
 router.get("/ai-prompt", getActivePrompt);
-router.put("/ai-prompt", updatePrompt);
+router.put("/ai-prompt", authorize("super_admin"), updatePrompt);
 
 module.exports = router;

@@ -312,6 +312,17 @@ export default function PatientHistory() {
                     {detailEntry.doctorSpecialty && <span> ({detailEntry.doctorSpecialty})</span>}
                   </div>
                 )}
+                {detailEntry.possibleCondition && (
+                  <div className="bg-indigo-50 border border-indigo-200 rounded-xl px-4 py-3">
+                    <p className="text-xs font-semibold text-indigo-700 uppercase tracking-wide">Possible Condition - {detailEntry.possibleCondition}</p>
+                    {detailEntry.possibleConditionConfidence && (
+                      <p className="text-xs text-indigo-700 mt-1">
+                        Confidence - <span className="font-semibold">{detailEntry.possibleConditionConfidence.charAt(0).toUpperCase() + detailEntry.possibleConditionConfidence.slice(1)}</span>
+                      </p>
+                    )}
+                    <p className="text-xs text-indigo-600 mt-1">AI prediction — please consult a doctor for proper diagnosis.</p>
+                  </div>
+                )}
                 {detailEntry.summary && (
                   <div>
                     <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1">Summary</p>

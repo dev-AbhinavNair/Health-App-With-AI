@@ -170,6 +170,8 @@ const generateAISummary = async (req, res) => {
     chat.aiRecommendations = aiRecommendations;
     chat.symptoms = symptoms;
     chat.severity = aiResult.severity || "medium";
+    chat.possibleCondition = aiResult.possibleCondition || null;
+    chat.possibleConditionConfidence = aiResult.possibleConditionConfidence || null;
     if (patientInfo) chat.patientInfo = patientInfo;
     chat.status = "pending_review";
 
@@ -384,6 +386,8 @@ const aiRespond = async (req, res) => {
         severity: String(s.severity || ""),
       }));
       chat.severity = aiResult.severity || "medium";
+      chat.possibleCondition = aiResult.possibleCondition || null;
+      chat.possibleConditionConfidence = aiResult.possibleConditionConfidence || null;
       if (patientContext) chat.patientInfo = patientContext;
 
       if (!chat.doctor) {
@@ -407,6 +411,8 @@ const aiRespond = async (req, res) => {
         message: closingMsg.content,
         summary: aiResult.summary,
         recommendations: aiResult.recommendations,
+        possibleCondition: aiResult.possibleCondition || null,
+        confidence: aiResult.possibleConditionConfidence || null,
       });
     }
 

@@ -261,6 +261,28 @@ export default function DoctorPatientDetail() {
                     </div>
                   )}
 
+                  {/* Possible Condition */}
+                  {chat.possibleCondition && (
+                    <div className="mb-6 bg-indigo-50 border border-indigo-200 rounded-2xl p-4">
+                      <div className="flex items-start gap-3">
+                        <div className="w-8 h-8 rounded-lg bg-indigo-100 flex items-center justify-center text-indigo-600 shrink-0">
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
+                          </svg>
+                        </div>
+                        <div>
+                          <p className="text-xs font-semibold text-indigo-700 uppercase tracking-wide">AI-Suspected Condition - {chat.possibleCondition}</p>
+                          {chat.possibleConditionConfidence && (
+                            <p className="text-xs text-indigo-700 mt-1">
+                              Confidence - <span className="font-semibold">{chat.possibleConditionConfidence.charAt(0).toUpperCase() + chat.possibleConditionConfidence.slice(1)}</span>
+                            </p>
+                          )}
+                          <p className="text-xs text-indigo-600 mt-1">This is a preliminary AI assessment — please verify with your clinical judgment.</p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
                   {/* Symptoms */}
                   {chat.symptoms?.length > 0 && (
                     <div className="mb-6">

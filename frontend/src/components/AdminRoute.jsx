@@ -12,7 +12,7 @@ export default function AdminRoute({ children }) {
     return <Navigate to="/" replace />;
   }
 
-  if (user.role !== 'admin') {
+  if (user.role !== 'admin' && user.role !== 'super_admin') {
     return <Navigate to="/" replace />;
   }
 

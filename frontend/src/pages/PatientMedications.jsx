@@ -220,6 +220,17 @@ export default function PatientMedications() {
                     {(latestChat?.severity || 'N/A').charAt(0).toUpperCase() + (latestChat?.severity || 'N/A').slice(1)}
                   </span>
                 </div>
+                {latestChat?.possibleCondition && (
+                  <div className="mb-3 bg-indigo-50 border border-indigo-200 rounded-xl px-3.5 py-2.5">
+                    <p className="text-xs font-semibold text-indigo-700 uppercase tracking-wide">Possible Condition - {latestChat.possibleCondition}</p>
+                    {latestChat.possibleConditionConfidence && (
+                      <p className="text-xs text-indigo-700 mt-1">
+                        Confidence - <span className="font-semibold">{latestChat.possibleConditionConfidence.charAt(0).toUpperCase() + latestChat.possibleConditionConfidence.slice(1)}</span>
+                      </p>
+                    )}
+                    <p className="text-xs text-indigo-600 mt-0.5">AI prediction — consult a doctor for proper diagnosis.</p>
+                  </div>
+                )}
                 {latestChat?.aiSummary ? (
                   <p className="text-sm text-slate-700 leading-relaxed">{latestChat.aiSummary}</p>
                 ) : (

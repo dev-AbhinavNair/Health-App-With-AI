@@ -32,6 +32,8 @@ const getHistory = async (req, res) => {
           statusBadge: chat.doctor
             ? { label: `Reviewed by ${chat.doctor.name}${chat.doctor.specialty ? ` (${chat.doctor.specialty})` : ''}`, color: "blue" }
             : null,
+          possibleCondition: chat.possibleCondition || null,
+          possibleConditionConfidence: chat.possibleConditionConfidence || null,
           chatId: chat._id,
           summary: chat.aiSummary,
           recommendations: chat.aiRecommendations,

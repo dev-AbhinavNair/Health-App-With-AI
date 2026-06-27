@@ -50,6 +50,13 @@ const chatSchema = new mongoose.Schema(
       enum: ["low", "medium", "high", "critical"],
       default: "medium",
     },
+    possibleCondition: {
+      type: String,
+    },
+    possibleConditionConfidence: {
+      type: String,
+      enum: ["low", "medium", "high"],
+    },
     patientInfo: {
       age: { type: Number },
       conditions: { type: [String] },

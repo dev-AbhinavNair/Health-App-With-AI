@@ -5,6 +5,7 @@ import DoctorManagement from './pages/DoctorManagement';
 import Reports from './pages/Reports';
 import UserManagement from './pages/UserManagement';
 import ActivityLogs from './pages/ActivityLogs';
+import AdminAIPrompt from './pages/AdminAIPrompt';
 
 import UserChatPage from './pages/UserChatPage';
 import DoctorSignup from './pages/DoctorSignup';
@@ -39,7 +40,7 @@ function App() {
 
   const homeElement = () => {
     if (!user) return <Login />;
-    if (user.role === 'admin') return <Navigate to="/dashboard" replace />;
+    if (user.role === 'admin' || user.role === 'super_admin') return <Navigate to="/dashboard" replace />;
     if (user.role === 'doctor') return <Navigate to="/doctor/patients" replace />;
     if (user.role === 'user') return <Navigate to="/home" replace />;
     if (user.role === 'pending_doctor') return <Navigate to="/doctor-status" replace />;
@@ -56,6 +57,7 @@ function App() {
         <Route path="/reports" element={<AdminRoute><Reports /></AdminRoute>} />
         <Route path="/patients" element={<AdminRoute><UserManagement /></AdminRoute>} />
         <Route path="/audit-logs" element={<AdminRoute><ActivityLogs /></AdminRoute>} />
+        <Route path="/ai-prompt" element={<AdminRoute><AdminAIPrompt /></AdminRoute>} />
         <Route path="/doctor/patients" element={<DoctorRoute><DoctorPatientList /></DoctorRoute>} />
         <Route path="/doctor/patients/:id" element={<DoctorRoute><DoctorPatientDetail /></DoctorRoute>} />
         <Route path="/doctor/urgent" element={<DoctorRoute><DoctorUrgentCases /></DoctorRoute>} />
